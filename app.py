@@ -14,17 +14,29 @@ import sys
 import os
 from pathlib import Path
 
-# Add src directory to path
-sys.path.append(str(Path(__file__).parent / "src"))
+# Add src directory to path for local and cloud deployment
+current_dir = Path(__file__).parent
+src_dir = current_dir / "src"
+sys.path.insert(0, str(current_dir))
+sys.path.insert(0, str(src_dir))
 
-# Import our modules
+# Import our modules with multiple fallback strategies
 try:
+    # Try direct import first (for Streamlit Cloud)
     from src.utils.analysis_engine import AnalysisEngine
     from src.utils.ethical_ai import EthicalAI
     from src.models.mental_health_classifier import MentalHealthClassifier
-except ImportError as e:
-    st.error(f"Error importing modules: {e}")
-    st.stop()
+except ImportError:
+    try:
+        # Try relative import (for local development)
+        from utils.analysis_engine import AnalysisEngine
+        from utils.ethical_ai import EthicalAI
+        from models.mental_health_classifier import MentalHealthClassifier
+    except ImportError as e:
+        st.error(f"Error importing modules: {e}")
+        st.error("Please ensure all required modules are installed and the project structure is correct.")
+        st.info("Try running: `pip install -r requirements.txt` and `python setup_models.py`")
+        st.stop()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
