@@ -1,0 +1,126 @@
+# Development Dependencies for Mental Health Detector
+# These packages are used for development, testing, and code quality
+
+# Testing Framework
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+pytest-asyncio>=0.21.0
+pytest-xdist>=3.0.0
+
+# Code Quality and Formatting
+black>=23.0.0
+isort>=5.12.0
+flake8>=6.0.0
+pylint>=2.17.0
+mypy>=1.0.0
+
+# Security
+bandit>=1.7.0
+safety>=2.3.0
+
+# Pre-commit Hooks
+pre-commit>=3.0.0
+
+# Documentation
+sphinx>=6.0.0
+sphinx-rtd-theme>=1.2.0
+myst-parser>=1.0.0
+
+# Development Tools
+ipython>=8.0.0
+jupyter>=1.0.0
+notebook>=6.5.0
+
+# Performance Testing
+pytest-benchmark>=4.0.0
+memory-profiler>=0.60.0
+
+# API Testing
+requests>=2.28.0
+httpx>=0.24.0
+
+# Mock and Test Data
+factory-boy>=3.2.0
+faker>=18.0.0
+
+# Coverage and Reporting
+coverage>=7.0.0
+pytest-html>=3.1.0
+
+# Debugging
+pdb++>=0.10.0
+ipdb>=0.13.0
+
+# Type Checking
+types-requests>=2.28.0
+types-PyYAML>=6.0.0
+
+# Linting Extensions
+flake8-docstrings>=1.7.0
+flake8-import-order>=0.18.0
+flake8-bugbear>=23.0.0
+
+# Development Server
+watchdog>=3.0.0
+
+# Environment Management
+python-dotenv>=1.0.0
+
+# Database Testing (if needed)
+pytest-postgresql>=4.1.0
+pytest-redis>=3.0.0
+
+# Async Testing
+pytest-asyncio>=0.21.0
+aioresponses>=0.7.0
+
+# Load Testing
+locust>=2.14.0
+
+# Code Complexity Analysis
+radon>=6.0.0
+xenon>=0.9.0
+
+# Import Sorting and Formatting
+autoflake>=2.0.0
+autopep8>=2.0.0
+
+# Git Hooks
+gitpython>=3.1.0
+
+# Notebook Extensions
+nbstripout>=0.6.0
+nbconvert>=7.0.0
+
+# Development Utilities
+tqdm>=4.64.0
+rich>=13.0.0
+click>=8.1.0
+
+# Profiling
+py-spy>=0.3.0
+line-profiler>=4.0.0
+
+# Documentation Testing
+doctest>=0.1.0
+pydocstyle>=6.3.0
+
+# Configuration Management
+dynaconf>=3.1.0
+python-decouple>=3.7.0
+
+# Development Database
+sqlite-utils>=3.30.0
+
+# API Documentation
+fastapi>=0.95.0  # For potential API endpoints
+uvicorn>=0.21.0  # ASGI server
+
+# Monitoring and Logging
+structlog>=23.0.0
+loguru>=0.7.0
+
+# Development Containers
+docker>=6.0.0
+docker-compose>=1.29.0

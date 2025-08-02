@@ -1,0 +1,63 @@
+# Mental Health Detector - Development Dockerfile
+# Optimized for development with hot reload and debugging tools
+
+FROM python:3.9-slim
+
+# Set environment variables for development
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    STREAMLIT_SERVER_PORT=8501 \
+    STREAMLIT_SERVER_ADDRESS=0.0.0.0 \
+    STREAMLIT_SERVER_HEADLESS=true \
+    STREAMLIT_BROWSER_GATHER_USAGE_STATS=false \
+    STREAMLIT_SERVER_RUN_ON_SAVE=true \
+    STREAMLIT_SERVER_FILE_WATCHER_TYPE=auto
+
+# Install system dependencies including development tools
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    git \
+    vim \
+    htop \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for development
+RUN groupadd -r devuser && useradd -r -g devuser -s /bin/bash devuser
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements files
+COPY requirements.txt requirements-dev.txt ./
+
+# Install Python dependencies
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt && \
+    pip install -r requirements-dev.txt
+
+# Create necessary directories
+RUN mkdir -p /app/models /app/logs /app/data /app/notebooks && \
+    chown -R devuser:devuser /app
+
+# Switch to non-root user
+USER devuser
+
+# Copy application code (this will be overridden by volume mount in dev)
+COPY --chown=devuser:devuser . .
+
+# Download models (for development)
+RUN python setup_models.py || echo "Models will be downloaded on first run"
+
+# Expose ports
+EXPOSE 8501 8888
+
+# Health check for development
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8501/_stcore/health || exit 1
+
+# Default command for development
+CMD ["streamlit", "run", "app.py", "--server.runOnSave", "true", "--server.fileWatcherType", "auto"]

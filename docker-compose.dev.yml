@@ -1,0 +1,122 @@
+version: '3.8'
+
+services:
+  mental-health-detector-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    
+    container_name: mental-health-detector-dev
+    
+    ports:
+      - "8501:8501"
+      - "8502:8502"  # Additional port for debugging
+    
+    environment:
+      - STREAMLIT_SERVER_PORT=8501
+      - STREAMLIT_SERVER_ADDRESS=0.0.0.0
+      - STREAMLIT_SERVER_HEADLESS=true
+      - STREAMLIT_BROWSER_GATHER_USAGE_STATS=false
+      - STREAMLIT_SERVER_RUN_ON_SAVE=true
+      - STREAMLIT_SERVER_FILE_WATCHER_TYPE=auto
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - DEBUG=1
+    
+    volumes:
+      # Mount source code for hot reload
+      - .:/app
+      - /app/venv  # Exclude virtual environment
+      - /app/__pycache__  # Exclude cache
+      - /app/.pytest_cache  # Exclude test cache
+    
+    working_dir: /app
+    
+    command: streamlit run app.py --server.runOnSave true --server.fileWatcherType auto
+    
+    restart: unless-stopped
+    
+    # Development tools
+    stdin_open: true
+    tty: true
+    
+    networks:
+      - mental-health-dev-network
+
+  # Development database (if needed)
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: mental-health-postgres-dev
+    environment:
+      POSTGRES_DB: mental_health_dev
+      POSTGRES_USER: dev_user
+      POSTGRES_PASSWORD: dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - mental-health-dev-network
+    profiles:
+      - database
+
+  # Redis for caching (development)
+  redis-dev:
+    image: redis:7-alpine
+    container_name: mental-health-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_dev_data:/data
+    networks:
+      - mental-health-dev-network
+    profiles:
+      - cache
+
+  # Jupyter notebook for development
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: mental-health-jupyter
+    ports:
+      - "8888:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    volumes:
+      - .:/app
+      - jupyter_data:/home/jovyan/work
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    networks:
+      - mental-health-dev-network
+    profiles:
+      - jupyter
+
+  # Development testing service
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: mental-health-test-runner
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: pytest tests/ -v --cov=src --cov-report=html
+    networks:
+      - mental-health-dev-network
+    profiles:
+      - testing
+
+networks:
+  mental-health-dev-network:
+    driver: bridge
+    name: mental-health-dev-network
+
+volumes:
+  postgres_dev_data:
+    name: mental-health-postgres-dev-data
+  redis_dev_data:
+    name: mental-health-redis-dev-data
+  jupyter_data:
+    name: mental-health-jupyter-data

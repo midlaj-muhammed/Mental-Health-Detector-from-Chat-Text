@@ -1,0 +1,77 @@
+# Mental Health Detector Configuration
+
+# Model Configuration
+models:
+  emotion_detection:
+    model_name: "j-hartmann/emotion-english-distilroberta-base"
+    confidence_threshold: 0.6
+    
+  sentiment_analysis:
+    model_name: "cardiffnlp/twitter-roberta-base-sentiment-latest"
+    confidence_threshold: 0.7
+    
+  mental_health_classifier:
+    model_name: "mental-health-classifier"  # Custom model to be trained
+    confidence_threshold: 0.65
+
+# Text Processing
+text_processing:
+  max_length: 512
+  min_length: 10
+  preprocessing:
+    remove_urls: true
+    remove_mentions: true
+    normalize_whitespace: true
+    lowercase: false  # Keep original case for better emotion detection
+
+# Classification Thresholds
+classification:
+  anxiety_indicators:
+    - "worry"
+    - "anxious" 
+    - "panic"
+    - "nervous"
+    - "stress"
+  
+  depression_indicators:
+    - "sad"
+    - "hopeless"
+    - "empty"
+    - "worthless"
+    - "tired"
+
+# Ethical AI Settings
+ethics:
+  enable_bias_detection: true
+  fairness_metrics: ["demographic_parity", "equalized_odds"]
+  disclaimer_required: true
+  crisis_intervention_threshold: 0.85
+
+# UI Configuration
+ui:
+  theme: "light"
+  max_input_length: 5000
+  show_confidence_scores: true
+  enable_export: true
+
+# Privacy and Security
+privacy:
+  encrypt_data: true
+  log_interactions: false
+  data_retention_days: 0  # No data retention by default
+
+# Mental Health Resources
+resources:
+  crisis_hotlines:
+    - name: "National Suicide Prevention Lifeline"
+      number: "988"
+      url: "https://suicidepreventionlifeline.org/"
+    - name: "Crisis Text Line"
+      number: "Text HOME to 741741"
+      url: "https://www.crisistextline.org/"
+  
+  professional_help:
+    - name: "Psychology Today"
+      url: "https://www.psychologytoday.com/us/therapists"
+    - name: "SAMHSA Treatment Locator"
+      url: "https://findtreatment.samhsa.gov/"

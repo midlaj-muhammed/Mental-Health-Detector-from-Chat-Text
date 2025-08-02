@@ -1,0 +1,35 @@
+# Core ML and NLP libraries
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+scikit-learn>=1.3.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Web interface
+streamlit>=1.25.0
+plotly>=5.15.0
+altair>=5.0.0
+
+# Text processing
+nltk>=3.8.0
+spacy>=3.6.0
+textblob>=0.17.0
+vaderSentiment>=3.3.0
+
+# Data handling and utilities
+requests>=2.31.0
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+tqdm>=4.65.0
+
+# Security and privacy
+cryptography>=41.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-html>=3.1.0
+
+# Additional utilities
+psutil>=5.9.0
