@@ -16,15 +16,15 @@ Ensure your GitHub repository contains these essential files:
 1. **Go to [share.streamlit.io](https://share.streamlit.io)**
 2. **Connect your GitHub account**
 3. **Deploy new app** with these settings:
-   - **Repository**: `midlaj-muhammed/Mental-Health-Detector-AI-Application-Built`
+   - **Repository**: `midlaj-muhammed/Mental-Health-Detector-from-Chat-Text`
    - **Branch**: `main`
-   - **Main file path**: `streamlit_app.py`
+   - **Main file path**: `app.py`
 4. **Click "Deploy!"**
 
 ### 3. Configuration Files
 
-#### `streamlit_app.py` (Entry Point)
-This file handles imports and error recovery for cloud deployment.
+#### `app.py` (Main Application)
+This is the main Streamlit application file with enhanced import handling for cloud deployment.
 
 #### `requirements.txt` (Python Dependencies)
 Contains all necessary Python packages with version constraints.
@@ -40,7 +40,7 @@ git
 
 ### Issue 1: "No module named 'src.models'"
 
-**Solution**: The app now includes fallback import strategies:
+**Solution**: The `app.py` file now includes fallback import strategies:
 ```python
 try:
     from src.utils.analysis_engine import AnalysisEngine
@@ -61,7 +61,7 @@ except ImportError:
 ### Issue 4: Import Path Issues
 
 **Cause**: Different path resolution between local and cloud environments
-**Solution**: Multiple import strategies implemented in `streamlit_app.py`
+**Solution**: Multiple import strategies implemented in `app.py`
 
 ## 📊 Expected Deployment Timeline
 
@@ -104,7 +104,7 @@ Streamlit Cloud provides a default URL, but you can configure a custom domain in
 ### If Deployment Fails:
 1. **Check the logs** in Streamlit Cloud dashboard
 2. **Verify all files** are in the repository
-3. **Test locally** with `streamlit run streamlit_app.py`
+3. **Test locally** with `streamlit run app.py`
 4. **Open an issue** on GitHub with error details
 
 ### Support Resources:
