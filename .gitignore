@@ -47,14 +47,29 @@ venv.bak/
 .env.test.local
 .env.production.local
 
-# Models and data (sensitive)
-models/
+# Large model files (GitHub has 100MB limit, these files are 300MB+)
 data/
 *.pkl
 *.joblib
 *.h5
 *.pt
 *.pth
+*.bin
+*.safetensors
+
+# Allow models directory structure and config files
+!models/
+!models/*/
+!models/*/*.json
+!models/*/*.txt
+!models/*/merges.txt
+!models/*/vocab.json
+!models/*/special_tokens_map.json
+!models/*/tokenizer_config.json
+
+# Exclude large model weight files specifically
+models/*/model.safetensors
+models/*/pytorch_model.bin
 
 # Logs
 logs/
