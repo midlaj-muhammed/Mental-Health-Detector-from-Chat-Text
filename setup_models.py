@@ -18,30 +18,77 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 def download_nltk_data():
-    """Download required NLTK data"""
+    """Download required NLTK data with priority for newer versions"""
     logger.info("Downloading NLTK data...")
 
-    # Handle both old and new NLTK data names
+    # Prioritize newer NLTK data names first, then fallback to older versions
     nltk_downloads = [
-        ('punkt', 'punkt_tab'),
+        ('punkt_tab', 'punkt'),  # Newer version first
         ('stopwords', 'stopwords'),
         ('wordnet', 'wordnet'),
         ('omw-1.4', 'omw-1.4'),
-        ('averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng'),
-        ('maxent_ne_chunker', 'maxent_ne_chunker_tab'),
-        ('words', 'words')
+        ('averaged_perceptron_tagger_eng', 'averaged_perceptron_tagger'),  # Newer first
+        ('maxent_ne_chunker_tab', 'maxent_ne_chunker'),  # Newer first
+        ('words', 'words'),
+        ('vader_lexicon', 'vader_lexicon'),  # For sentiment analysis
+        ('brown', 'brown'),  # For additional text processing
     ]
 
+    successful_downloads = []
+    failed_downloads = []
+
     for primary, fallback in tqdm(nltk_downloads, desc="NLTK Downloads"):
+        success = False
+
+        # Try primary (newer) version first
         try:
-            nltk.download(primary, quiet=True)
-            logger.info(f"Downloaded NLTK data: {primary}")
+            result = nltk.download(primary, quiet=True)
+            if result:
+                logger.info(f"✅ Downloaded NLTK data: {primary}")
+                successful_downloads.append(primary)
+                success = True
         except Exception as e:
+            logger.debug(f"Primary download failed for {primary}: {e}")
+
+        # Try fallback (older) version if primary failed
+        if not success:
             try:
-                nltk.download(fallback, quiet=True)
-                logger.info(f"Downloaded NLTK data: {fallback}")
-            except Exception as e2:
-                logger.warning(f"Failed to download NLTK data {primary}/{fallback}: {e2}")
+                result = nltk.download(fallback, quiet=True)
+                if result:
+                    logger.info(f"✅ Downloaded NLTK data: {fallback} (fallback)")
+                    successful_downloads.append(fallback)
+                    success = True
+            except Exception as e:
+                logger.debug(f"Fallback download failed for {fallback}: {e}")
+
+        if not success:
+            logger.warning(f"⚠️ Failed to download NLTK data: {primary}/{fallback}")
+            failed_downloads.append(f"{primary}/{fallback}")
+
+    logger.info(f"NLTK Downloads - Success: {len(successful_downloads)}, Failed: {len(failed_downloads)}")
+    if failed_downloads:
+        logger.warning(f"Failed downloads: {failed_downloads}")
+
+    # Force download punkt_tab specifically for Streamlit Cloud
+    try:
+        import ssl
+        try:
+            _create_unverified_https_context = ssl._create_unverified_context
+        except AttributeError:
+            pass
+        else:
+            ssl._create_default_https_context = _create_unverified_https_context
+
+        nltk.download('punkt_tab', quiet=False)
+        logger.info("✅ Force downloaded punkt_tab")
+    except Exception as e:
+        logger.warning(f"⚠️ Force download of punkt_tab failed: {e}")
+        # Try alternative approach
+        try:
+            nltk.download('punkt', quiet=False)
+            logger.info("✅ Downloaded punkt as fallback")
+        except Exception as e2:
+            logger.error(f"❌ All punkt downloads failed: {e2}")
 
 def download_spacy_model():
     """Download spaCy English model"""

@@ -20,6 +20,36 @@ src_dir = current_dir / "src"
 sys.path.insert(0, str(current_dir))
 sys.path.insert(0, str(src_dir))
 
+# Download NLTK data on startup for Streamlit Cloud
+@st.cache_resource
+def download_nltk_data_startup():
+    """Download NLTK data on startup with caching"""
+    import nltk
+    import ssl
+
+    # Fix SSL context
+    try:
+        _create_unverified_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    else:
+        ssl._create_default_https_context = _create_unverified_https_context
+
+    # Download required packages
+    packages = ['punkt_tab', 'punkt', 'stopwords', 'wordnet', 'omw-1.4',
+                'averaged_perceptron_tagger_eng', 'averaged_perceptron_tagger']
+
+    for package in packages:
+        try:
+            nltk.download(package, quiet=True)
+        except:
+            pass  # Continue if download fails
+
+    return True
+
+# Download NLTK data
+download_nltk_data_startup()
+
 # Import our modules with multiple fallback strategies
 try:
     # Try direct import first (for Streamlit Cloud)

@@ -19,30 +19,45 @@ import numpy as np
 from dataclasses import dataclass
 from collections import Counter
 
-# Download required NLTK data
+# Download required NLTK data with better error handling
 def download_nltk_data():
     """Download NLTK data with fallback for different versions"""
+    logger = logging.getLogger(__name__)
+
+    # Prioritize newer NLTK data names
     downloads = [
-        ('punkt', 'punkt_tab'),
+        ('punkt_tab', 'punkt'),  # Newer version first
         ('stopwords', 'stopwords'),
         ('wordnet', 'wordnet'),
         ('omw-1.4', 'omw-1.4'),
-        ('averaged_perceptron_tagger', 'averaged_perceptron_tagger_eng'),
-        ('maxent_ne_chunker', 'maxent_ne_chunker_tab'),
-        ('words', 'words')
+        ('averaged_perceptron_tagger_eng', 'averaged_perceptron_tagger'),
+        ('maxent_ne_chunker_tab', 'maxent_ne_chunker'),
+        ('words', 'words'),
+        ('vader_lexicon', 'vader_lexicon')
     ]
 
     for primary, fallback in downloads:
+        success = False
         try:
-            nltk.download(primary, quiet=True)
-        except:
+            result = nltk.download(primary, quiet=True)
+            if result:
+                success = True
+        except Exception:
             try:
-                nltk.download(fallback, quiet=True)
-            except:
-                pass  # Skip if both fail
+                result = nltk.download(fallback, quiet=True)
+                if result:
+                    success = True
+            except Exception:
+                pass
 
-# Download data
-download_nltk_data()
+        if not success:
+            logger.warning(f"Failed to download NLTK data: {primary}/{fallback}")
+
+# Download data on import
+try:
+    download_nltk_data()
+except Exception as e:
+    logging.getLogger(__name__).warning(f"NLTK data download failed: {e}")
 
 @dataclass
 class TextFeatures:
@@ -207,9 +222,20 @@ class TextProcessor:
         processed_text = self.preprocess_text(text, preserve_case=True)
         clean_text = self.preprocess_text(text, preserve_case=False)
         
-        # Basic features
-        words = word_tokenize(clean_text)
-        sentences = sent_tokenize(processed_text)
+        # Basic features with error handling
+        try:
+            words = word_tokenize(clean_text)
+        except Exception as e:
+            # Fallback to simple split if NLTK tokenizer fails
+            words = clean_text.split()
+            logger.warning(f"NLTK word tokenizer failed, using simple split: {e}")
+
+        try:
+            sentences = sent_tokenize(processed_text)
+        except Exception as e:
+            # Fallback to simple sentence splitting
+            sentences = [s.strip() for s in processed_text.split('.') if s.strip()]
+            logger.warning(f"NLTK sentence tokenizer failed, using simple split: {e}")
         
         word_count = len(words)
         sentence_count = len(sentences)
@@ -284,10 +310,15 @@ class TextProcessor:
             doc = self.nlp(text)
             entities = [ent.text for ent in doc.ents]
         else:
-            # Fallback to NLTK
-            tokens = word_tokenize(text)
-            pos_tags_list = pos_tag(tokens)
-            chunks = ne_chunk(pos_tags_list)
+            # Fallback to NLTK with error handling
+            try:
+                tokens = word_tokenize(text)
+                pos_tags_list = pos_tag(tokens)
+                chunks = ne_chunk(pos_tags_list)
+            except Exception as e:
+                logger.warning(f"NLTK NER processing failed: {e}")
+                # Return empty list if NLTK fails
+                return []
             
             for chunk in chunks:
                 if hasattr(chunk, 'label'):
