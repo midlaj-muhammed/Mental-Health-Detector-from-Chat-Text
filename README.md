@@ -5,6 +5,8 @@
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+## 🚀 **[Try the Live Demo](https://mental-health-detector-from-chat-text.streamlit.app/)**
+
 A responsible AI-powered application that analyzes text to identify potential mental health concerns including anxiety, depression, and crisis indicators. Built with ethical AI principles, privacy protection, and professional mental health guidelines.
 
 > **⚠️ IMPORTANT DISCLAIMER**
@@ -33,18 +35,25 @@ A responsible AI-powered application that analyzes text to identify potential me
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### 🌐 Try Online (No Installation Required)
+**[🔗 Launch Live Demo](https://mental-health-detector-from-chat-text.streamlit.app/)**
+
+Experience the Mental Health Detector instantly in your browser - no setup required!
+
+### 💻 Local Installation
+
+#### Prerequisites
 - Python 3.8 or higher
 - 4GB+ RAM (for model loading)
 - Internet connection (for initial model download)
 
-### Installation Options
+#### Installation Options
 
 #### Option 1: Standard Installation
 ```bash
 # Clone the repository
-git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built.git
-cd Mental-Health-Detector-AI-Application-Built
+git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text.git
+cd Mental-Health-Detector-from-Chat-Text
 
 # Create and activate virtual environment
 python -m venv venv
@@ -63,8 +72,8 @@ streamlit run app.py
 #### Option 2: Using Make (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built.git
-cd Mental-Health-Detector-AI-Application-Built
+git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text.git
+cd Mental-Health-Detector-from-Chat-Text
 
 # Setup everything with one command
 make setup
@@ -76,8 +85,8 @@ make run
 #### Option 3: Docker (Production Ready)
 ```bash
 # Clone the repository
-git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built.git
-cd Mental-Health-Detector-AI-Application-Built
+git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text.git
+cd Mental-Health-Detector-from-Chat-Text
 
 # Build and run with Docker Compose
 docker-compose up --build
@@ -134,7 +143,12 @@ docker-compose exec mental-health-detector curl http://localhost:8501/_stcore/he
 
 ## 📖 Usage Guide
 
-### Web Interface
+### 🌐 Online Demo (Recommended)
+**[🚀 Use the Live Demo](https://mental-health-detector-from-chat-text.streamlit.app/)**
+
+The easiest way to try the Mental Health Detector is through our hosted Streamlit Cloud deployment. No installation required!
+
+### 💻 Local Web Interface
 1. **Start the Application**
    ```bash
    streamlit run app.py
@@ -228,7 +242,7 @@ print(f"Confidence: {result['mental_health_analysis']['confidence_scores']['over
 ## 📁 Project Structure
 
 ```
-Mental-Health-Detector-AI-Application-Built/
+Mental-Health-Detector-from-Chat-Text/
 ├── 📄 README.md                 # Project documentation
 ├── 📄 LICENSE                   # MIT License
 ├── 📄 CONTRIBUTING.md           # Contribution guidelines
@@ -358,8 +372,8 @@ We welcome contributions that align with our ethical AI principles and prioritiz
 ### Quick Start for Contributors
 ```bash
 # Fork and clone the repository
-git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built.git
-cd Mental-Health-Detector-AI-Application-Built
+git clone https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text.git
+cd Mental-Health-Detector-from-Chat-Text
 
 # Set up development environment
 make dev-setup
@@ -393,8 +407,8 @@ The MIT License was chosen to:
 
 ### Getting Help
 - 📖 **Documentation**: Check our comprehensive guides
-- 🐛 **Bug Reports**: [Open an issue](https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built/issues)
-- 💡 **Feature Requests**: [Start a discussion](https://github.com/midlaj-muhammed/Mental-Health-Detector-AI-Application-Built/discussions)
+- 🐛 **Bug Reports**: [Open an issue](https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text/issues)
+- 💡 **Feature Requests**: [Start a discussion](https://github.com/midlaj-muhammed/Mental-Health-Detector-from-Chat-Text/discussions)
 - 📧 **Security Issues**: Email security@yourproject.com
 
 ### Community Guidelines
